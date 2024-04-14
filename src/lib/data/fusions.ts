@@ -1,4 +1,4 @@
-var fusionsList = [
+export const fusionsList = [
   null,
   [
 
@@ -202572,4 +202572,4 @@ var fusionsList = [
   [
 
   ]
-]
+] as const;
