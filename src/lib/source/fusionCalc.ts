@@ -94,7 +94,7 @@ function getCardsInHand() {
 	return cards;
 }
 
-function findFusions() {
+export function findFusions() {
 	const cards = getCardsInHand();
 
 	const fuses = [];
