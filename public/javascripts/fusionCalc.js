@@ -20,10 +20,7 @@ function fusesToHTML(fuselist) {
     return fuselist
         .map(function (fusion) {
             var res =
-                "<div class='result-div'>Input: " +
-                fusion.card1.Name +
-                "<br>Input: " +
-                fusion.card2.Name;
+                "<div class='result-div'>Input: " + fusion.card1.Name + "<br>Input: " + fusion.card2.Name;
             if (fusion.result) {
                 // Equips and Results don't have a result field
                 res += "<br>Result: " + fusion.result.Name;
@@ -80,11 +77,8 @@ function hasFusion(fusionList, card) {
     return fusionList.some((c) => c.Id === card.Id);
 }
 
-function findFusions() {
-    var cards = [];
-    var monsters = [];
-    var others = [];
-
+function getCardsInHand() {
+    let cards = [];
     for (i = 1; i <= 5; i++) {
         var name = $("#hand" + i).val();
         var card = getCardByName(name);
@@ -92,6 +86,12 @@ function findFusions() {
             cards.push(card);
         }
     }
+
+    return cards;
+}
+
+function findFusions() {
+    var cards = getCardsInHand();
 
     var fuses = [];
     var equips = [];
@@ -113,8 +113,12 @@ function findFusions() {
         }
     }
 
+    return { fusions: fuses, equips };
+}
+
+function renderFusions(fusions, equips) {
     outputLeft.innerHTML = "<h2 class='center'>Fusions:</h2>";
-    outputLeft.innerHTML += fusesToHTML(fuses.sort((a, b) => b.result.Attack - a.result.Attack));
+    outputLeft.innerHTML += fusesToHTML(fusions.sort((a, b) => b.result.Attack - a.result.Attack));
 
     outputRight.innerHTML = "<h2 class='center'>Equips:</h2>";
     outputRight.innerHTML += fusesToHTML(equips);
@@ -143,13 +147,15 @@ for (i = 1; i <= 5; i++) {
             checkCard(this.value, this.id + "-info");
         }
         resultsClear();
-        findFusions();
+        var { fusions, equips } = findFusions();
+        renderFusions(fusions, equips);
     });
 
     $("#hand" + i).on("awesomplete-selectcomplete", function () {
         checkCard(this.value, this.id + "-info");
         resultsClear();
-        findFusions();
+        var { fusions, equips } = findFusions();
+        renderFusions(fusions, equips);
     });
 }
 
